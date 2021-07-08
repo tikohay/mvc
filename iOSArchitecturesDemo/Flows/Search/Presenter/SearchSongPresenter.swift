@@ -12,10 +12,14 @@ final class SearchSongPresenter {
     
     weak var viewInput: (UIViewController & SearchSongViewInput)?
     
-    private let searchService = ITunesSearchService()
+    let interactor: SearchSongInteractor
+    
+    init(interactor: SearchSongInteractor) {
+        self.interactor = interactor
+    }
     
     private func requestSong(with query: String) {
-        self.searchService.getSongs(forQuery: query) { [weak self] result in
+        self.interactor.requestSongs(with: query) { [weak self] result in
             guard let self = self else { return }
             result
                 .withValue { songs in

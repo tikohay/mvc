@@ -12,10 +12,16 @@ final class SearchPresenter {
     
     weak var viewInput: (UIViewController & SearchViewInput)?
     
-    private let searchService = ITunesSearchService()
+    let interactor: SearchAppInteractorInput
+    let router: SearchAppRouterInput
+
+    init(interactor: SearchAppInteractorInput, router: SearchAppRouterInput) {
+        self.interactor = interactor
+        self.router = router
+    }
     
     private func requestApps(with query: String) {
-        self.searchService.getApps(forQuery: query) { [weak self] result in
+        self.interactor.requestApps(with: query) { [weak self] result in
             guard let self = self else { return }
             result
                 .withValue { apps in
@@ -45,6 +51,6 @@ extension SearchPresenter: SearchViewOutput {
     }
     
     func viewDidSelectApp(_ app: ITunesApp) {
-        self.openAppDetails(with: app)
+        self.router.openDetails(for: app)
     }
 }

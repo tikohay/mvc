@@ -12,16 +12,22 @@ import UIKit
 final class SearchModuleBuilder {
     
     static func buildAppVC() -> (UIViewController & SearchViewInput) {
-        let presenter = SearchPresenter()
+        let router = SearchAppRouter()
+        let interactor = SearchAppInteractor()
+        let presenter = SearchPresenter(interactor: interactor, router: router)
         let viewController = SearchViewController(presenter: presenter)
         presenter.viewInput = viewController
+        router.viewController = viewController
+        
         return viewController
     }
     
     static func buildSongVC() -> (UIViewController & SearchSongViewInput) {
-        let presenter = SearchSongPresenter()
+        let interactor = SearchSongInteractor()
+        let presenter = SearchSongPresenter(interactor: interactor)
         let viewController = SearchSongViewController(presenter: presenter)
         presenter.viewInput = viewController
+        
         return viewController
     }
 }
